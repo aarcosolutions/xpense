@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xpense.Api", "xpense.Api\xp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xpense.DataModel", "xpense.DataModel\xpense.DataModel.csproj", "{CEA192F5-2DD9-4E65-801B-3C4B8B915576}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xpense.Repository", "xpense.Repository\xpense.Repository.csproj", "{791905C4-0980-451A-BA63-C1F055852BFF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{CEA192F5-2DD9-4E65-801B-3C4B8B915576}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEA192F5-2DD9-4E65-801B-3C4B8B915576}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEA192F5-2DD9-4E65-801B-3C4B8B915576}.Release|Any CPU.Build.0 = Release|Any CPU
+		{791905C4-0980-451A-BA63-C1F055852BFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{791905C4-0980-451A-BA63-C1F055852BFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{791905C4-0980-451A-BA63-C1F055852BFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{791905C4-0980-451A-BA63-C1F055852BFF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,10 +2,11 @@
 
 namespace xpense.DataModel
 {
-    public abstract class BaseEntity
+    public interface IAuditable
     {
-        public DateTime DateCreated { get; set; }
-        public DateTime DateModified { get; set; }
-        public long? ModifiedBy { get; set; }
+        DateTime DateCreated { get; set; }
+        DateTime DateModified { get; set; }
+        long? CreatedBy { get; set; }
+        long? ModifiedBy { get; set; }
     }
 }
