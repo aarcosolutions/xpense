@@ -9,11 +9,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using xpense.Repository;
 using Microsoft.EntityFrameworkCore;
+using xpense.Contract.Repository;
 
 namespace xpense.Api
 {
     public class Startup
-    {        
+    {
+        public const string CORS_POLICY_NAME = "CorsPolicy";
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -29,9 +32,10 @@ namespace xpense.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<XpenseDbContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("xpenseDatabase"))
-            );
+            ConfigureDependencies(services);
+
+            ConfigureCors(services);
+
             // Add framework services.
             services.AddMvc();
         }
@@ -42,13 +46,35 @@ namespace xpense.Api
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseMvc();
-
-            if(env.IsDevelopment())
+            if (env.IsDevelopment())
             {
-                DataInitialiser.Initialise(context);
+                app.UseDeveloperExceptionPage();
             }
 
+            app.UseMvcWithDefaultRoute();
+        }
+
+        private void ConfigureCors(IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    Startup.CORS_POLICY_NAME,
+                    builder =>
+                        builder.AllowAnyOrigin()
+                                .SetPreflightMaxAge(TimeSpan.FromSeconds(2520))
+                                .WithMethods(new string[] { "OPTIONS", "GET", "POST", "PUT", "DELETE","PATCH", "HEAD" })
+                    );
+            });
+        }
+
+        private void ConfigureDependencies(IServiceCollection services)
+        {
+            services.AddDbContext<XpenseDbContext>(
+                options => options.UseSqlServer(Configuration.GetConnectionString("xpenseDatabase"))
+            );
+
+            services.AddScoped<IOrganisationRepository, OrganisationRepository>();
         }
     }
 }

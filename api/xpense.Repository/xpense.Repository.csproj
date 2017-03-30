@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\xpense.Contract\xpense.Contract.csproj" />
     <ProjectReference Include="..\xpense.DataModel\xpense.DataModel.csproj" />
   </ItemGroup>
 

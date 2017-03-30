@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace xpense.DataModel
+namespace xpense.Contract.Model
 {
     public interface IAuditable
     {
