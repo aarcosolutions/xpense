@@ -8,23 +8,27 @@ using xpense.DataModel;
 
 namespace xpense.Repository
 {
-    public class OrganisationRepository : IOrganisationRepository
+    public class OrganisationRepository : BaseRepository, IOrganisationRepository
     {
-        private XpenseDbContext _context { get; }
-
-        public OrganisationRepository(XpenseDbContext context)
+        public OrganisationRepository(XpenseDbContext context):base(context)
         {
-            _context = context;
         }
 
-        public Task AddOrganisation(Organisation organisation)
+        public void AddOrganisation(Organisation organisation)
         {
-            throw new NotImplementedException();
+            if(organisation != null)
+            {
+                organisation.Key = Guid.NewGuid();
+                _context.Organisations.Add(organisation);
+            }
         }
 
-        public Task ArchiveOrganisation(Organisation organisation)
+        public void ArchiveOrganisation(Organisation organisation)
         {
-            throw new NotImplementedException();
+            if(organisation != null)
+            {
+                organisation.IsArchived = true;
+            }
         }
 
         public async Task<Organisation> GetOrganisation(Guid key)
@@ -37,12 +41,12 @@ namespace xpense.Repository
             return await _context.Organisations.ToListAsync();
         }
 
-        public Task<bool> OrganisationExists(Guid key)
+        public async Task<bool> OrganisationExists(Guid key)
         {
-            throw new NotImplementedException();
+            return await _context.Organisations.AnyAsync(x => x.Key == key);
         }
 
-        public Task UpdateOrganisation(Organisation organisation)
+        public void UpdateOrganisation(Organisation organisation)
         {
             throw new NotImplementedException();
         }

@@ -10,6 +10,9 @@ using Microsoft.Extensions.Logging;
 using xpense.Repository;
 using Microsoft.EntityFrameworkCore;
 using xpense.Contract.Repository;
+using xpense.DataModel.Mapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace xpense.Api
 {
@@ -37,7 +40,10 @@ namespace xpense.Api
             ConfigureCors(services);
 
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc(setupAction=> {
+                setupAction.ReturnHttpNotAcceptable = true;
+                setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +55,17 @@ namespace xpense.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler(builder =>
+                {
+                    builder.Run(async c =>
+                    {
+                        c.Response.StatusCode = 500;
+                        await c.Response.WriteAsync("An unexpected fault has occured. Please try again later");
+                    });
+                });
             }
 
             app.UseMvcWithDefaultRoute();
@@ -70,6 +87,14 @@ namespace xpense.Api
 
         private void ConfigureDependencies(IServiceCollection services)
         {
+            var config = new AutoMapper.MapperConfiguration(c =>
+            {
+                c.AddProfile(new XpenseProfileConfiguration());
+            });
+            var mapper = config.CreateMapper();
+
+            services.AddSingleton(mapper);
+
             services.AddDbContext<XpenseDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("xpenseDatabase"))
             );

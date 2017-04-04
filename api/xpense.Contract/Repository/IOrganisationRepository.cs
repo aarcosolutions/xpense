@@ -6,13 +6,13 @@ using xpense.DataModel;
 
 namespace xpense.Contract.Repository
 {
-    public interface IOrganisationRepository
+    public interface IOrganisationRepository: IBaseRepository
     {
         Task<Organisation> GetOrganisation(Guid key);
         Task<IEnumerable<Organisation>> GetOrganisations();
-        Task AddOrganisation(Organisation organisation);
-        Task ArchiveOrganisation(Organisation organisation);
-        Task UpdateOrganisation(Organisation organisation);
+        void AddOrganisation(Organisation organisation);
+        void ArchiveOrganisation(Organisation organisation);
+        void UpdateOrganisation(Organisation organisation);
         Task<bool> OrganisationExists(Guid key);
     }
 }
