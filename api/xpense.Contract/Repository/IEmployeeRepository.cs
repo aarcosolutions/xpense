@@ -11,8 +11,8 @@ namespace xpense.Contract.Repository
         Task<IEnumerable<Employee>> GetEmployees(Guid organisationKey);
         Task<Employee> GetEmployee(Guid organisationKey, Guid employeeKey);
         Task<bool> EmployeeExists(Guid organisationKey, Guid employeeKey);
-        void ArchiveEmployee(Employee employee);
-        void AddEmployee(Employee employee);
-        void UpdateEmployee(Employee employee);
+        Task ArchiveEmployee(Employee employee, Guid organisationKey);
+        Task AddEmployee(Employee employee, Guid organisationKey);
+        Task UpdateEmployee(Employee employee, Guid organisationKey);
     }
 }

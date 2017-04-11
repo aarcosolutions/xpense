@@ -8,6 +8,8 @@ namespace xpense.DataModel.Dto
     {
         public Guid Key { get; set; }
         public string CompanyNumber { get; set; }
+        public string Name { get; set; }
+
         public string RegisteredAddress { get; set; }
         public DateTime? IncorporationDate { get; set; }
         public string PayeReference { get; set; }

@@ -45,5 +45,22 @@ namespace xpense.Api.Controllers
             return Ok(map);
 
         }
+
+        [HttpPost(Name ="CreateOrganisation")]
+        public async Task<IActionResult> CreateOrganisation([FromBody]OrganisationDto organisation)
+        {
+            if(organisation == null)
+            {
+                return BadRequest();
+            }
+            var org = _mapper.Map<Organisation>(organisation);
+            _organisationRepository.AddOrganisation(org);
+            if(!await _organisationRepository.Save())
+            {
+                throw new Exception("Organisation creation failed");
+            }
+            var createdOrg = _mapper.Map<OrganisationDto>(org);
+            return CreatedAtRoute("GetOrganisation", new {key=org.Key}, createdOrg);
+        }
     }
 }

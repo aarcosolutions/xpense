@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using xpense.Contract.Repository;
+using AutoMapper;
+using xpense.DataModel.Dto;
+using xpense.DataModel;
 
 namespace xpense.Api.Controllers
 {
@@ -11,42 +14,48 @@ namespace xpense.Api.Controllers
     public class EmployeesController : Controller
     {
         private IEmployeeRepository _employeeRepository { get; }
+        private IMapper _mapper { get; }
 
-        public EmployeesController(IEmployeeRepository employeeRepository)
+        public EmployeesController(IEmployeeRepository employeeRepository, IMapper mapper)
         {
             _employeeRepository = employeeRepository;
+            _mapper = mapper;
         }
 
-        // GET: api/values
-        [HttpGet("{employeeKey}")]
-        public IEnumerable<string> GetEmployees(Guid organisationKey, Guid employeeKey)
+        [HttpGet("{employeeKey}", Name ="GetEmployee")]
+        public async Task<IActionResult> GetEmployee(Guid organisationKey, Guid employeeKey)
         {
-            return new string[] { "value1", "value2" };
+            var employee = await _employeeRepository.GetEmployee(organisationKey, employeeKey);
+
+            if (employee == null)
+                return NotFound();
+
+            return Ok(_mapper.Map<EmployeeDto>(employee));
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet(Name = "GetEmployees")]
+        public async Task<IActionResult> GetEmployees(Guid organisationKey)
         {
-            return "value";
+            var employee = await _employeeRepository.GetEmployees(organisationKey);
+            return Ok(_mapper.Map<IEnumerable<EmployeeDto>>(employee));
         }
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
+        [HttpPost(Name="CreateEmployee")]
+        public async Task<IActionResult>CreateEmployee([FromBody] EmployeeDto employee, Guid organisationKey)
         {
-        }
+            if (employee == null)
+                return BadRequest();
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
+            var emp = _mapper.Map<Employee>(employee);  
+            await _employeeRepository.AddEmployee(emp, organisationKey);
+            if(!await _employeeRepository.Save())
+            {
+                throw new Exception("Employee creation failed");
+            }
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            var empDto = _mapper.Map<EmployeeDto>(emp);
+
+            return CreatedAtRoute("GetEmployee", new {organisationKey=emp.Organisation.Key, employeeKey = emp.Key}, empDto);
         }
     }
 }

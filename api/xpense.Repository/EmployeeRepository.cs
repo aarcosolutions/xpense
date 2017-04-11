@@ -14,12 +14,18 @@ namespace xpense.Repository
         public EmployeeRepository(XpenseDbContext context):base(context)
         {
         }
-        public void AddEmployee(Employee employee)
+        public async Task AddEmployee(Employee employee, Guid organisationKey)
         {
-            throw new NotImplementedException();
+            if(employee != null)
+            {
+                var org = await _context.Organisations.FirstOrDefaultAsync(o => o.Key == organisationKey);
+                employee.Organisation = org ?? throw new Exception($"Organisation {organisationKey} does not exists");
+                employee.Key = Guid.NewGuid();
+                _context.Employees.Add(employee);
+            }
         }
 
-        public void ArchiveEmployee(Employee employee)
+        public Task ArchiveEmployee(Employee employee, Guid organisationKey)
         {
             throw new NotImplementedException();
         }
@@ -31,15 +37,20 @@ namespace xpense.Repository
 
         public async Task<Employee> GetEmployee(Guid organisationKey, Guid employeeKey)
         {
-            return await _context.Employees.FirstOrDefaultAsync(x => x.Organisation.Key == organisationKey && x.Key == employeeKey);
+            return await _context.Employees
+                            .Include(x=>x.Organisation)
+                            .FirstOrDefaultAsync(x => x.Organisation.Key == organisationKey && x.Key == employeeKey);
         }
 
         public async Task<IEnumerable<Employee>> GetEmployees(Guid organisationKey)
         {
-            return await _context.Employees.Where(x => x.Organisation.Key == organisationKey).ToListAsync();
+            return await _context.Employees
+                            .Include(x=>x.Organisation)
+                            .Where(x => x.Organisation.Key == organisationKey)
+                            .ToListAsync();
         }
 
-        public void UpdateEmployee(Employee employee)
+        public Task UpdateEmployee(Employee employee, Guid organisationKey)
         {
             throw new NotImplementedException();
         }

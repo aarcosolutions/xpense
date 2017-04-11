@@ -15,12 +15,9 @@ namespace xpense.Repository
             _context = context;
         }
 
-        public async Task Save()
+        public async Task<bool> Save()
         {
-            if(_context.ChangeTracker.HasChanges())
-            {
-                await _context.SaveChangesAsync();
-            }
+            return await _context.SaveChangesAsync() >= 0;
         }
     }
 }

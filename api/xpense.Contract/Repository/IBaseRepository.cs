@@ -7,6 +7,6 @@ namespace xpense.Contract.Repository
 {
     public interface IBaseRepository
     {
-        Task Save();
+        Task<bool> Save();
     }
 }

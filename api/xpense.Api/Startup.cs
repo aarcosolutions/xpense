@@ -100,6 +100,8 @@ namespace xpense.Api
             );
 
             services.AddScoped<IOrganisationRepository, OrganisationRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
         }
     }
 }

@@ -46,7 +46,7 @@ namespace xpense.Repository
                     MiddleName="R",
                     IsArchived=false,
                     NiNumber="NI1234567",
-                    StartDate=DateTime.Today.AddYears(-5),
+                    DateOfJoining=DateTime.Today.AddYears(-5),
                     Title="Mr",
                     Organisation = org.First(),
                     ContactDetails = new List<EmployeeContactDetail>
@@ -74,7 +74,7 @@ namespace xpense.Repository
                     MiddleName="J",
                     IsArchived=false,
                     NiNumber="NI234567",
-                    StartDate=DateTime.Today.AddYears(-15),
+                    DateOfJoining=DateTime.Today.AddYears(-15),
                     Title="Mrs",
                     Organisation = org.First(),
                     ContactDetails = new List<EmployeeContactDetail>
@@ -101,7 +101,7 @@ namespace xpense.Repository
                     LastName="Junior",
                     IsArchived=false,
                     NiNumber="NI9234567",
-                    StartDate=DateTime.Today.AddYears(-8),
+                    DateOfJoining=DateTime.Today.AddYears(-8),
                     Title="Mr",
                     Organisation = org.Last(),
                     ContactDetails = new List<EmployeeContactDetail>
@@ -129,7 +129,7 @@ namespace xpense.Repository
                     MiddleName="A",
                     IsArchived=false,
                     NiNumber="NI834567",
-                    StartDate=DateTime.Today.AddYears(-18),
+                    DateOfJoining=DateTime.Today.AddYears(-18),
                     Title="Mr",
                     Organisation = org.Last(),
                     ContactDetails = new List<EmployeeContactDetail>

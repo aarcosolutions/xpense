@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using xpense.Contract.Model;
+using System.Threading;
 
 namespace xpense.Repository
 {
@@ -10,15 +11,19 @@ namespace xpense.Repository
     {
         public BaseDbContext(DbContextOptions<TContext> options):base(options)
         {
-
+            Database.Migrate();
         }
 
-        public Task<int> SaveChangesAsync(bool applyAuditRules)
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (applyAuditRules)
-                ApplyAuditRule();
+            ApplyAuditRule();
+            return base.SaveChangesAsync(cancellationToken);
+        }
 
-            return base.SaveChangesAsync();
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            ApplyAuditRule();
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
 
         public override int SaveChanges()
